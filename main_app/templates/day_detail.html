@@ -4,19 +4,36 @@
   <h1>Day Detail</h1>
   
   <h2>{{ day.name }}</h2>
-  
-  <h3>Recipes</h3>
-  <ul>
-    {% for recipe in recipes %}
-      <li>{{ recipe.title }}</li>
-    {% empty %}
-      <li>No recipes available for this day</li>
-    {% endfor %}
-  </ul>
-
   <form action="{% url 'recipe_search' week.pk day.pk %}" method="get">
-    <input type="text" name="query" placeholder="Search recipes">
+    <input type="text" name="query" placeholder="Search recipes" value="{{ query }}">
     <button type="submit">Search</button>
   </form>
-{% endblock %}
+  
+  {% if recipes %}
+    <h3>Recipes</h3>
+    <ul>
+      {% for recipe in recipes %}
+        <li>
+          <h4>{{ recipe.strMeal }}</h4>
+          <img src="{{ recipe.strMealThumb }}" alt="{{ recipe.strMeal }}">
+          <p>{{ recipe.strInstructions }}</p>
+          <h5>Ingredients:</h5>
+          <ul>
+            {% for key, value in recipe.items %}
+              {% if key|slice:"0:13" == "strIngredient" and value %}
+                <li>{{ value }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
 
+          <a href="{{ recipe.strYoutube }}">Watch the Recipe Video</a>
+          <a href="{{ recipe.strSource }}">Recipe Source</a>
+        </li>
+      {% empty %}
+        <li>No recipes found</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No recipes found</p>
+  {% endif %}
+{% endblock %}

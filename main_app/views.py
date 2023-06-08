@@ -41,34 +41,39 @@ class DayDetailView(LoginRequiredMixin, DetailView):
         context['week'] = week
         return context
 
+
 class RecipeSearchView(LoginRequiredMixin, View):
     def get(self, request, pk, day_id):
         week = Week.objects.get(pk=pk)
         day = Day.objects.get(pk=day_id)
-        query = request.GET.get('query', '')  # Get the query from the URL parameters
+        query = request.GET.get('query', '')
 
-        env = Env()
-        env.read_env()
+        url = "https://www.themealdb.com/api/json/v1/1/search.php"
+        querystring = {"s": query}
+        response = requests.get(url, params=querystring)
 
-        api_key = env('API_KEY')
-
-        # Perform the recipe search using the Tasty API
-        url = "https://tasty.p.rapidapi.com/recipes/auto-complete"
-        querystring = {"prefix": query}
-        headers = {
-            'x-rapidapi-key': api_key,
-            'x-rapidapi-host': "tasty.p.rapidapi.com"
-        }
-        response = requests.get(url, headers=headers, params=querystring)
-        
         if response.status_code == requests.codes.ok:
-            recipes = response.json()
-            print("API is working. Response data:")
-            print(recipes)
+            api_data = response.json()
+            recipes = api_data.get('meals', [])
         else:
             recipes = []
 
-        return render(request, 'day_detail.html', {'week': week, 'day': day, 'recipes': recipes})
+        print(api_data)  # Print the API response for debugging
+        print(recipes)  # Print the extracted recipes for debugging
+
+        context = {
+            'week': week,
+            'day': day,
+            'query': query,
+            'recipes': recipes,
+        }
+
+        return render(request, 'day_detail.html', context)
+
+
+
+
+
 
 def signup(request):
     error_message = ''
