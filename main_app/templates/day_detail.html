@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Day Detail</h1>
+  
+  <h2>{{ day.name }}</h2>
+  
+  <h3>Recipes</h3>
+  <ul>
+    {% for recipe in recipes %}
+      <li>{{ recipe.title }}</li>
+    {% empty %}
+      <li>No recipes available for this day</li>
+    {% endfor %}
+  </ul>
+
+  <form action="{% url 'recipe_search' week.pk day.pk %}" method="get">
+    <input type="text" name="query" placeholder="Search recipes">
+    <button type="submit">Search</button>
+  </form>
+{% endblock %}
+

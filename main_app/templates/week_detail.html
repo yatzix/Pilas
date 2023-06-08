@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Week Detail</h1>
+  
+  <h2>{{ week.name }}</h2>
+  
+  <h3>Days</h3>
+  <ul>
+    {% for day in week.day_set.all %}
+      <li><a href="{% url 'day_detail' week.pk day.pk %}">{{ day.name }}</a></li>
+    {% empty %}
+      <li>No days available for this week</li>
+    {% endfor %}
+  </ul>
+  
+{% endblock %}

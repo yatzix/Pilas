@@ -5,38 +5,73 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import DaysOfTheWeek, Recipe
 import requests
 from django.contrib.auth import login
-import environ
-
-# Create your views here.
-from django.shortcuts import render
+from environ import Env
+from django.views import View
+from .models import Week, Day, Recipe
 
 def home(request):
-	  return render(request, 'home.html')
+    weeks = Week.objects.all()
+    days = Day.objects.all()
+    context = {
+        'weeks': weeks,
+        'days': days,
+    }
+    return render(request, 'home.html', context)
+
 def about(request):
-	  return render(request, 'about.html')
+    return render(request, 'about.html')
 
-@login_required
-def daysOftheWeek(request):
-  daysOftheWeek = DaysOfTheWeek.objects.filter(user=request.user)
-  return render(request, 'daysOftheWeek/index.html', {'daysOftheWeek': daysOftheWeek})
+class WeekDetailView(DetailView):
+    model = Week
+    template_name = 'week_detail.html'
+    context_object_name = 'week'
 
-@login_required
-def daysOfTheWeek_detail(request, dayOfTheWeek_id):
-  daysOfTheWeek = DaysOfTheWeek.objects.get(id=dayOfTheWeek_id)
-  id_list = daysOfTheWeek.recipes.all().values_list('id') 
-  recipes_user_doesnt_have = Recipe.objects.exclude(id__in=id_list)
-  return render(request, 'dayOfTheWeek/detail.html', { 'dayOfTheWeek': daysOfTheWeek, 'recipes': recipes_user_doesnt_have})
+class DayDetailView(LoginRequiredMixin, DetailView):
+    model = Day
+    template_name = 'day_detail.html'
+    context_object_name = 'day'
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Retrieve the associated Week object
+        week = self.object.week
+        # Add the Week object to the context
+        context['week'] = week
+        return context
 
+class RecipeSearchView(LoginRequiredMixin, View):
+    def get(self, request, pk, day_id):
+        week = Week.objects.get(pk=pk)
+        day = Day.objects.get(pk=day_id)
+        query = request.GET.get('query', '')  # Get the query from the URL parameters
 
-class RecipeDetail(LoginRequiredMixin,DetailView):
-    model = Recipe
+        env = Env()
+        env.read_env()
 
-LoginRequiredMixin,
+        api_key = env('API_KEY')
+
+        # Perform the recipe search using the Tasty API
+        url = "https://tasty.p.rapidapi.com/recipes/auto-complete"
+        querystring = {"prefix": query}
+        headers = {
+            'x-rapidapi-key': api_key,
+            'x-rapidapi-host': "tasty.p.rapidapi.com"
+        }
+        response = requests.get(url, headers=headers, params=querystring)
+        
+        if response.status_code == requests.codes.ok:
+            recipes = response.json()
+            print("API is working. Response data:")
+            print(recipes)
+        else:
+            recipes = []
+
+        return render(request, 'day_detail.html', {'week': week, 'day': day, 'recipes': recipes})
+
 def signup(request):
-    # POST request menas user is signing up with a form submission
+    error_message = ''
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -50,15 +85,3 @@ def signup(request):
         'form': form,
         'error': error_message
     })
-
-
-def recipes(request):
-    api_url = 'https://api.calorieninjas.com/v1/recipe?query='
-    query = 'mushroom risotto'
-    env = environ.Env()
-    api_key = env('API_KEY')
-    response = requests.get(api_url + query, headers={'X-Api-Key': 'YOUR_API_KEY'})
-    if response.status_code == requests.codes.ok:
-        print(response.text)
-    else:
-        print("Error:", response.status_code, response.text)
