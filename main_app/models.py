@@ -8,9 +8,12 @@ from django.contrib.auth.models import User
 class Week(models.Model):
     name = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('week_detail', kwargs={'pk': self.pk})
     
 class Day(models.Model):
     week = models.ForeignKey(Week, on_delete=models.CASCADE)
@@ -18,6 +21,8 @@ class Day(models.Model):
 
     def __str__(self):
         return self.name    
+    def get_absolute_url(self):
+        return reverse('day_detail', kwargs={'pk': self.pk})
 
 class Recipe(models.Model):
     name = models.CharField(max_length=100)

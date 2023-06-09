@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
   <h1>Day Detail</h1>
   
   <h2>{{ day.name }}</h2>
-  <form action="{% url 'recipe_search' week.pk day.pk %}" method="get">
+  <form action="{% url 'search_recipes' week.pk day.pk %}" method="get">
     <input type="text" name="query" placeholder="Search recipes" value="{{ query }}">
     <button type="submit">Search</button>
   </form>
@@ -36,4 +37,18 @@
   {% else %}
     <p>No recipes found</p>
   {% endif %}
+
+  {% if recipes %}
+    <form method="POST" action="{% url 'search_recipes' week.pk day.pk %}">
+        {% csrf_token %}
+        <label for="recipe">Recipes:</label>
+        <select name="recipe_id" id="recipe">
+            <option value="">Select a recipe</option>
+            {% for recipe in recipes %}
+                <option value="{{ recipe.idMeal }}">{{ recipe.strMeal }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Save Recipe</button>
+    </form>
+{% endif %}
 {% endblock %}

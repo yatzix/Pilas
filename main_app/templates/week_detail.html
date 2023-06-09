@@ -6,12 +6,19 @@
   <h2>{{ week.name }}</h2>
   
   <h3>Days</h3>
+  <a href="{% url 'days_create' week.pk %}">Add Day Of The Week</a>
   <ul>
     {% for day in week.day_set.all %}
-      <li><a href="{% url 'day_detail' week.pk day.pk %}">{{ day.name }}</a></li>
+      <li><a href="{% url 'day_detail' week.pk day.id %}">{{ day.name }}</a></li>
+      
     {% empty %}
-      <li>No days available for this week</li>
+      <li>Add a Day of the Week To Start Planning</li>
+      
     {% endfor %}
+    <div class="card-action">
+      <a href="{% url 'week_update' object.id %}">Edit Week</a>
+      <a href="{% url 'week_delete' object.id %}">Delete Week</a>
+    </div>
   </ul>
   
 {% endblock %}

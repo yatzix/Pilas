@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if object %}
+    <h1>Edit Week</h1>
+{% else %}
+    <h1>Add Week</h1>
+{% endif %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input class="btn blue" type="submit" value="{% if object %} Update Week {% else %} Add Week {% endif %}">
+</form>
+
+{% endblock %}

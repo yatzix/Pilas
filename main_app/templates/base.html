@@ -19,9 +19,16 @@
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo">Logo</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="">Add Recipe</a></li>
         <li><a href="{% url 'about' %}">About</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'week_create' %}">Add a Week</a></li>
+        <li><a href="{% url 'index' %}">My Meal Planner</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'signup' %}">Signup</a></li>
+                {% endif %}
       </ul>
 
       <ul id="nav-mobile" class="sidenav">

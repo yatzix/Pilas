@@ -4,14 +4,20 @@
   <h1>Welcome to My Recipe Planner</h1>
   
   <h2>Weeks</h2>
-  <ul>
-    {% for week in weeks %}
-      <li>
-        <a href="{% url 'week_detail' week.pk %}">{{ week.name }}</a>
-      </li>
-    {% empty %}
-      <li>No weeks available</li>
-    {% endfor %}
-  </ul>
-  
+  {% if weeks %}
+    <ul>
+      {% for week in weeks %}
+        <a href="{% url 'week_detail' week.id %}">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">{{ week.name }}</span>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Start by adding a Week</p>
+    <a href="{% url 'week_create' %}">Create Week</a>
+  {% endif %}
 {% endblock %}
