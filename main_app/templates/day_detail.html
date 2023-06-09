@@ -29,7 +29,7 @@
           <a href="{{ recipe.strSource }}">Recipe Source</a>
 
           
-          <form method="POST" action="{% url 'save_recipe' week.id day.id recipe.idMeal%}">
+          <form method="POST" action="{% url 'save_recipe' week.id day.id recipe.id %}">
             {% csrf_token %}
             <input type="hidden" name="name" value="{{ recipe.strMeal }}">
             <input type="hidden" name="instructions" value="{{ recipe.strInstructions }}">

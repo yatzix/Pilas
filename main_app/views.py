@@ -80,21 +80,22 @@ class RecipeSearchView(LoginRequiredMixin, View):
         for recipe in recipes:
             recipe['recipe_id'] = recipe['idMeal']
 
-        print(api_data)  
-        print(recipes)  
+        print(api_data)  # Print the API response for debugging
+        print(recipes)  # Print the extracted recipes for debugging
 
         context = {
             'week': week,
             'day': day,
             'query': query,
             'recipes': recipes,
+            'recipe_id': None
         }
 
         return render(request, 'day_detail.html', context)
 
 @require_POST
 def save_recipe(request, week_id, day_id, recipe_id):
-    
+
     name = request.POST.get('name')
     instructions = request.POST.get('instructions')
     thumbnail = request.POST.get('thumbnail')
@@ -103,7 +104,7 @@ def save_recipe(request, week_id, day_id, recipe_id):
     source_link = request.POST.get('source_link')
     day = Day.objects.get(id=day_id)
 
-   
+
     recipe = Recipe(
         name=name, 
         instructions=instructions,
@@ -115,9 +116,6 @@ def save_recipe(request, week_id, day_id, recipe_id):
     )
     recipe.save()
 
-    print('recipe.idMeal:', recipe.id)
-
-    
     return redirect('day_detail', pk=week_id, day_id=day_id, recipe_id=recipe.id)
 
 
