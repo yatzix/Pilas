@@ -25,6 +25,7 @@ class Day(models.Model):
         return reverse('day_detail', kwargs={'pk': self.pk})
 
 class Recipe(models.Model):
+    idMeal = models.CharField(max_length=10, null=True,)
     name = models.CharField(max_length=300)
     thumbnail = models.URLField(default='') 
     instructions = models.TextField(default='')
