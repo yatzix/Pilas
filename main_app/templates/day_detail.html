@@ -1,21 +1,19 @@
-
-
-
 {% block content %}
   <h1>Day Detail</h1>
-  
+
   <h2>{{ day.name }}</h2>
-  <form action="{% url 'search_recipes' week.pk day.pk %}" method="get">
+  <form action="{% url 'recipe_search' week.pk day.pk %}" method="get">
     <input type="text" name="query" placeholder="Search recipes" value="{{ query }}">
     <button type="submit">Search</button>
   </form>
-  
+
   {% if recipes %}
     <h3>Recipes</h3>
     <ul>
       {% for recipe in recipes %}
         <li>
           <h4>{{ recipe.strMeal }}</h4>
+          <p>idMeal: {{ recipe.idMeal }}</p>
           <img src="{{ recipe.strMealThumb }}" alt="{{ recipe.strMeal }}">
           <p>{{ recipe.strInstructions }}</p>
           <h5>Ingredients:</h5>
@@ -29,6 +27,21 @@
 
           <a href="{{ recipe.strYoutube }}">Watch the Recipe Video</a>
           <a href="{{ recipe.strSource }}">Recipe Source</a>
+
+          <!-- Save recipe form starts here -->
+          <form method="POST" action="{% url 'save_recipe' week.id day.id recipe.idMeal %}">
+            {% csrf_token %}
+            <input type="hidden" name="name" value="{{ recipe.strMeal }}">
+            <input type="hidden" name="instructions" value="{{ recipe.strInstructions }}">
+            <input type="hidden" name="thumbnail" value="{{ recipe.strMealThumb }}">
+            <!-- for the ingredients you might have to adjust the way they are passed depending on how your data is structured -->
+            <input type="hidden" name="ingredients" value="{{ recipe.ingredients }}">
+            <input type="hidden" name="video_link" value="{{ recipe.strYoutube }}">
+            <input type="hidden" name="source_link" value="{{ recipe.strSource }}">
+            <button type="submit">Save Recipe</button>
+          </form>
+          <!-- Save recipe form ends here -->
+
         </li>
       {% empty %}
         <li>No recipes found</li>
@@ -37,18 +50,4 @@
   {% else %}
     <p>No recipes found</p>
   {% endif %}
-
-  {% if recipes %}
-    <form method="POST" action="{% url 'search_recipes' week.pk day.pk %}">
-        {% csrf_token %}
-        <label for="recipe">Recipes:</label>
-        <select name="recipe_id" id="recipe">
-            <option value="">Select a recipe</option>
-            {% for recipe in recipes %}
-                <option value="{{ recipe.idMeal }}">{{ recipe.strMeal }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Save Recipe</button>
-    </form>
-{% endif %}
 {% endblock %}

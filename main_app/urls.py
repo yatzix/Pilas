@@ -13,6 +13,7 @@ urlpatterns = [
         path('days/<int:pk>/delete/', views.DayDelete.as_view(), name='days_delete'),
         path('week/<int:pk>/', views.WeekDetailView.as_view(), name='week_detail'),
         path('week/<int:pk>/day/<int:day_id>/', views.DayDetailView.as_view(), name='day_detail'),
-        path('week/<int:pk>/day/<int:day_id>/search/', views.RecipeSearchView.as_view(), name='search_recipes'),
+        path('week/<int:pk>/day/<int:day_id>/search/', views.RecipeSearchView.as_view(), name='recipe_search'),
+        path('week/<int:week_id>/day/<int:day_id>/recipe/<int:recipe_id>/save', views.save_recipe, name='save_recipe'),
         path('accounts/signup/', views.signup, name='signup',)
 ]

@@ -9,6 +9,7 @@ import requests
 from django.contrib.auth import login
 from django.views import View
 from .models import Week, Day, Recipe
+from django.views.decorators.http import require_POST
 
 
 def home(request):
@@ -42,7 +43,11 @@ class DayDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         week = self.object.week
+        day = self.object 
+        recipes = Recipe.objects.filter(day=day)
+
         context['week'] = week
+        context['recipes'] = recipes
         return context
 
     def get_object(self):
@@ -82,7 +87,30 @@ class RecipeSearchView(LoginRequiredMixin, View):
 
         return render(request, 'day_detail.html', context)
 
+@require_POST
+def save_recipe(request, week_id, day_id, recipe_id):
+    # Extract the values from the POST request
+    name = request.POST.get('name')
+    instructions = request.POST.get('instructions')
+    thumbnail = request.POST.get('thumbnail')
+    ingredients = request.POST.get('ingredients')
+    video_link = request.POST.get('video_link')
+    source_link = request.POST.get('source_link')
 
+    # Create a new recipe instance and save it to the database
+    recipe = Recipe(
+        name=name, 
+        instructions=instructions,
+        thumbnail=thumbnail,
+        ingredients=ingredients,
+        video_link=video_link,
+        source_link=source_link,
+    )
+    recipe.save()
+
+    # Redirect to a page showing the recipe was saved successfully
+    # You can change this to where you want users to be redirected after saving a recipe
+    return redirect('day_detail', pk=week_id, day_id=day_id)
 
 
     

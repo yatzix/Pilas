@@ -31,6 +31,7 @@ class Recipe(models.Model):
     ingredients = models.TextField(default='')
     video_link = models.URLField(default='')
     source_link = models.URLField(default='')
+    day = models.ForeignKey('Day', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
