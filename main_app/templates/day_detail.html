@@ -50,4 +50,19 @@
   {% else %}
     <p>No recipes found</p>
   {% endif %}
+  {% if saved_recipes %}
+  <h3>Saved Recipes</h3>
+  <ul>
+    {% for recipe in saved_recipes %}
+      <li>
+        <h4>{{ recipe.name }}</h4>
+        <img src="{{ recipe.thumbnail }}" alt="{{ recipe.name }}">
+        <p>{{ recipe.instructions }}</p>
+        <!-- display other recipe attributes as necessary -->
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No recipes saved yet</p>
+{% endif %}
 {% endblock %}
