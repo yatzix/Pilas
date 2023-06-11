@@ -8,9 +8,10 @@
 
 /* Yatzil styles */
 
+
 nav ul a,
 nav .brand-logo {
-  color: #444;
+  color: #0e530b;
 }
 
 p {
@@ -57,3 +58,8 @@ p {
 footer.page-footer {
   margin: 0;
 }
+
+.home-page-name{
+  color: red !important;
+  }
+  
