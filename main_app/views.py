@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 import requests
+from django.urls import reverse
 from django.contrib.auth import login
 from django.views import View
 from .models import Week, Day, Recipe
@@ -80,15 +81,15 @@ class RecipeSearchView(LoginRequiredMixin, View):
         for recipe in recipes:
             recipe['recipe_id'] = recipe['idMeal']
 
-        print(api_data)  # Print the API response for debugging
-        print(recipes)  # Print the extracted recipes for debugging
+        print(api_data)  
+        print(recipes)  
 
         context = {
             'week': week,
             'day': day,
             'query': query,
             'recipes': recipes,
-            'recipe_id': None
+            
         }
 
         return render(request, 'day_detail.html', context)
@@ -116,7 +117,7 @@ def save_recipe(request, week_id, day_id, recipe_id):
     )
     recipe.save()
 
-    return redirect('day_detail', pk=week_id, day_id=day_id, recipe_id=recipe.id)
+    return redirect('day_detail', pk=week_id, day_id=day_id, recipe_id=recipe_id)
 
 
     
@@ -161,12 +162,16 @@ class WeekDelete(LoginRequiredMixin,DeleteView):
 class DayCreate(LoginRequiredMixin,CreateView):
     model = Day
     fields = ['name']
-    success_url = '/week/'
 
     def form_valid(self, form):
         week = Week.objects.get(pk=self.kwargs['week_id'])
         form.instance.week = week
         return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse('week_detail', kwargs={'pk': self.object.week.pk})
+    
+
 class DayList(LoginRequiredMixin,ListView):
     model = Day
 
@@ -175,6 +180,10 @@ class DayUpdate(LoginRequiredMixin,UpdateView):
     model = Day
     fields = ['name']
 
+    def get_success_url(self):
+        return reverse('week_detail', kwargs={'pk': self.object.week.pk})
+
 class DayDelete(LoginRequiredMixin,DeleteView):
     model = Day
     success_url = '/week/'
+
