@@ -10,18 +10,19 @@
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="../../static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
-  <link href="../../static/css/style.css" type="text/css"  rel="stylesheet" media="screen,projection"/>
+  <link href="../../../../static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="../../../../static/css/style.css" type="text/css"  rel="stylesheet" media="screen,projection"/>
   
 </head>
 <body>
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
-      <a id="logo-container" href="#" class="brand-logo">Logo</a>
+      <a id="logo-container" href="{% url 'home' %}" class="brand-logo">
+        <img src="https://i.imgur.com/VUNNYrU.png" alt="Logo"> PILAS
+      </a>
       <ul class="right hide-on-med-and-down">
         <li><a href="{% url 'about' %}">About</a></li>
         {% if user.is_authenticated %}
-        <li><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'week_create' %}">Add a Week</a></li>
         <li><a href="{% url 'index' %}">My Meal Planner</a></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>
