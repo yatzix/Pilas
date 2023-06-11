@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+
 {% block content %}
   <h1>Day Detail</h1>
 
@@ -28,8 +30,11 @@
           <a href="{{ recipe.strYoutube }}">Watch the Recipe Video</a>
           <a href="{{ recipe.strSource }}">Recipe Source</a>
 
-          
-          <form method="POST" action="{% url 'save_recipe' week.id day.id recipe.id %}">
+          {% if recipe.recipe_id %}
+            <form method="POST" action="{% url 'save_recipe' week.id day.id recipe.recipe_id %}">
+          {% else %}
+            <form method="POST" action="{% url 'recipe_search' week.id day.id %}">
+          {% endif %}
             {% csrf_token %}
             <input type="hidden" name="name" value="{{ recipe.strMeal }}">
             <input type="hidden" name="instructions" value="{{ recipe.strInstructions }}">
@@ -37,10 +42,8 @@
             <input type="hidden" name="ingredients" value="{{ recipe.ingredients }}">
             <input type="hidden" name="video_link" value="{{ recipe.strYoutube }}">
             <input type="hidden" name="source_link" value="{{ recipe.strSource }}">
-            <button type="submit">Save Recipe</button>
+            <button type="submit">{% if recipe.recipe_id %}Save Recipe{% else %}Search{% endif %}</button>
           </form>
-          
-
         </li>
       {% empty %}
         <li>No recipes found</li>
@@ -49,19 +52,24 @@
   {% else %}
     <p>No recipes found</p>
   {% endif %}
+
   {% if saved_recipes %}
-  <h3>Saved Recipes</h3>
-  <ul>
-    {% for recipe in saved_recipes %}
-      <li>
-        <h4>{{ recipe.name }}</h4>
-        <img src="{{ recipe.thumbnail }}" alt="{{ recipe.name }}">
-        <p>{{ recipe.instructions }}</p>
-        
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>No recipes saved yet</p>
-{% endif %}
+    <h3>Saved Recipes</h3>
+    <ul>
+      {% for recipe in saved_recipes %}
+        <li>
+          <h4>{{ recipe.name }}</h4>
+          <img src="{{ recipe.thumbnail }}" alt="{{ recipe.name }}">
+          <p>{{ recipe.instructions }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No recipes saved yet</p>
+  {% endif %}
+
+  <div class="card-action">
+    <a href="{% url 'days_update' object.id %}">Edit Day</a>
+    <a href="{% url 'days_delete' object.id %}">Delete Day</a>
+  </div>
 {% endblock %}
