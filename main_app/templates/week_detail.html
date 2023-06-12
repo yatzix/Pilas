@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="week-background"></div>
-  <h1 class="center-align white-text">{{ week.name }}</h1>
+  <h1 class="center-align white-text week-bg-text">{{ week.name }}</h1>
   
   <h3 class="white-text">Days</h3>
   <button class="waves-effect waves-light btn"><a href="{% url 'days_create' week.pk %}">Add Day Of The Week</a></button>
