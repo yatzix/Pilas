@@ -2,7 +2,7 @@
 # <center>Pilas</center>
 ### <center>Get Ready to put on your batteries</center>
 
-The name Pilas comes from the saying "Ponte las pilas". This spanish term means to "Get it together". This app help those who needs organizing in their life to start planning their  next steps. The app allows you to log in and create your week and oganize it to best fit your needs. Once you create you week you can pick a day of the week to search and save recipes to. 
+The name Pilas comes from the saying "Ponte las pilas". This spanish term means to "Get it together". This app help those who needs organizing in their life to start planning their  next steps. The app allows you to log in and create your week and organize it to best fit your needs. Once you create you week you can pick a day of the week to search and save recipes to. 
 
 ### Deployed App
 
