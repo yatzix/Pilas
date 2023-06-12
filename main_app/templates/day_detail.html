@@ -15,35 +15,43 @@
       {% for recipe in recipes %}
         <li>
           <h4>{{ recipe.strMeal }}</h4>
-          <p>idMeal: {{ recipe.idMeal }}</p>
+          {% if recipe.idMeal %}
+            <p>idMeal: {{ recipe.idMeal }}</p>
+          {% endif %}
           <img src="{{ recipe.strMealThumb }}" alt="{{ recipe.strMeal }}">
           <p>{{ recipe.strInstructions }}</p>
-          <h5>Ingredients:</h5>
-          <ul>
-            {% for key, value in recipe.items %}
-              {% if key|slice:"0:13" == "strIngredient" and value %}
-                <li>{{ value }}</li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-
+          {% if recipe.ingredients %}
+            <h5>Ingredients:</h5>
+            <ul>
+              {% for key, value in recipe.items %}
+                {% if key|slice:"0:13" == "strIngredient" and value %}
+                  <li>{{ value }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          {% endif %}
+          {% if recipe.strYoutube %}
           <a href="{{ recipe.strYoutube }}">Watch the Recipe Video</a>
+          {% endif %}
+
+          {% if recipe.strSource %}
           <a href="{{ recipe.strSource }}">Recipe Source</a>
+          {% endif %}
 
           {% if recipe.recipe_id %}
             <form method="POST" action="{% url 'save_recipe' week.id day.id recipe.recipe_id %}">
-          {% else %}
-            <form method="POST" action="{% url 'recipe_search' week.id day.id %}">
           {% endif %}
             {% csrf_token %}
+            {% if recipe.recipe_id %}
             <input type="hidden" name="name" value="{{ recipe.strMeal }}">
             <input type="hidden" name="instructions" value="{{ recipe.strInstructions }}">
             <input type="hidden" name="thumbnail" value="{{ recipe.strMealThumb }}">
             <input type="hidden" name="ingredients" value="{{ recipe.ingredients }}">
             <input type="hidden" name="video_link" value="{{ recipe.strYoutube }}">
             <input type="hidden" name="source_link" value="{{ recipe.strSource }}">
-            <button type="submit">{% if recipe.recipe_id %}Save Recipe{% else %}Search{% endif %}</button>
+            <button type="submit">Save Recipe</button>
           </form>
+          {% endif %}
         </li>
       {% empty %}
         <li>No recipes found</li>
@@ -69,7 +77,7 @@
   {% endif %}
 
   <div class="card-action">
-    <a href="{% url 'days_update' object.id %}">Edit Day</a>
-    <a href="{% url 'days_delete' object.id %}">Delete Day</a>
+    <a href="{% url 'days_update' day.id %}">Edit Day</a>
+    <a href="{% url 'days_delete' day.id %}">Delete Day</a>
   </div>
 {% endblock %}

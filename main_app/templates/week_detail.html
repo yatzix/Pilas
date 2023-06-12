@@ -1,23 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Week Detail</h1>
+<div class="week-background"></div>
+  <h1 class="center-align white-text">{{ week.name }}</h1>
   
-  <h2>{{ week.name }}</h2>
-  
-  <h3>Days</h3>
-  <a href="{% url 'days_create' week.pk %}">Add Day Of The Week</a>
+  <h3 class="white-text">Days</h3>
+  <button class="waves-effect waves-light btn"><a href="{% url 'days_create' week.pk %}">Add Day Of The Week</a></button>
   <ul>
     {% for day in week.day_set.all %}
-      <li><a href="{% url 'day_detail' week.pk day.id %}">{{ day.name }}</a></li>
+    <a href="{% url 'day_detail' week.pk day.id %}">
+      <div class="card-panel hoverable">
+        <div class="card-content center-align">
+          <h4 class="card-title">{{ day.name }}</h4>
+        </div>
+      </div>
       
     {% empty %}
       <li>Add a Day of the Week To Start Planning</li>
       
     {% endfor %}
-    <div class="card-action">
-      <a href="{% url 'week_update' object.id %}">Edit Week</a>
-      <a href="{% url 'week_delete' object.id %}">Delete Week</a>
+    <div class="white-text">
+      <button class="waves-effect waves-light btn"><a href="{% url 'week_update' object.id %}">Edit Week</a></button>
+      <button class="waves-effect waves-light btn"><a href="{% url 'week_delete' object.id %}">Delete Week</a></button>
     </div>
   </ul>
   

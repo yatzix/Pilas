@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Welcome to My Recipe Planner</h1>
+<div class="week-background"></div>
+  <h1 class="center-align white-text index-bg-text">Welcome to My Recipe Planner</h1>
   
-  <h2>Weeks</h2>
+  <h2 class="center-align white-text">Your Weeks</h2>
   {% if weeks %}
     <ul>
       {% for week in weeks %}
         <a href="{% url 'week_detail' week.id %}">
-          <div class="card">
-            <div class="card-content">
-              <span class="card-title">{{ week.name }}</span>
+          <div class="card-panel hoverable">
+            <div class="card-content center-align" >
+              <h4 class="card-title">{{ week.name }}</h4>
             </div>
           </div>
         </a>
