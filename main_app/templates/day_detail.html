@@ -94,7 +94,10 @@
           <h4 class="white-text">{{ recipe.name }}</h4>
           <img class="thumbnail" src="{{ recipe.thumbnail }}" alt="{{ recipe.name }}">
           <p class="center-align white-text week-bg-text">{{ recipe.instructions }}</p>
+          <a class="waves-effect waves-light btn" href="{{ recipe.strYoutube }}">Watch the Recipe Video</a>
+          <a class="waves-effect waves-light btn" href="{{ recipe.strSource }}">Recipe Source</a>
         </li>
+        
       {% endfor %}
     </ul>
   {% else %}

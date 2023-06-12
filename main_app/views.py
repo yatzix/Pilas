@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView
 from django.contrib.auth.forms import UserCreationForm
-from django.views.generic.edit import CreateView
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 import requests
 from django.urls import reverse
@@ -43,27 +41,18 @@ class DayDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        week = self.object.week
-        day = self.object 
-        recipes = Recipe.objects.filter(day=day)
-        saved_recipes = Recipe.objects.filter(day=day)
-        
-        
-
-        context['week'] = week
-        context['recipes'] = recipes
-        context['saved_recipes'] = saved_recipes
+        day = self.object
+        context['week'] = day.week
+        context['recipes'] = Recipe.objects.filter(day=day)
+        context['saved_recipes'] = Recipe.objects.filter(day=day)
         return context
 
     def get_object(self):
         week_id = self.kwargs.get('pk')
         day_id = self.kwargs.get('day_id')
-        
         return self.model.objects.get(week__id=week_id, id=day_id)
+
         
-
-
-
 class RecipeSearchView(LoginRequiredMixin, View):
     def get(self, request, pk, day_id):
         week = Week.objects.get(pk=pk)
@@ -122,25 +111,6 @@ def save_recipe(request, week_id, day_id, recipe_id):
     return redirect('day_detail', pk=week_id, day_id=day_id, recipe_id=recipe_id)
 
 
-    
-
-
-def signup(request):
-    error_message = ''
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('index')
-        else:
-            error_message = 'invalid signup - try again'
-    form = UserCreationForm()
-    return render(request, 'registration/signup.html', {
-        'form': form,
-        'error': error_message
-    })
-
 class WeekCreate(LoginRequiredMixin,CreateView):
     model = Week
     fields = ['name']
@@ -148,9 +118,6 @@ class WeekCreate(LoginRequiredMixin,CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
-
-class WeekList(LoginRequiredMixin,ListView):
-    model = Week
 
 
 class WeekUpdate(LoginRequiredMixin,UpdateView):
@@ -174,9 +141,6 @@ class DayCreate(LoginRequiredMixin,CreateView):
         return reverse('week_detail', kwargs={'pk': self.object.week.pk})
     
 
-class DayList(LoginRequiredMixin,ListView):
-    model = Day
-
 
 class DayUpdate(LoginRequiredMixin,UpdateView):
     model = Day
@@ -188,4 +152,20 @@ class DayUpdate(LoginRequiredMixin,UpdateView):
 class DayDelete(LoginRequiredMixin,DeleteView):
     model = Day
     success_url = '/week/'
+
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+        else:
+            error_message = 'invalid signup - try again'
+    form = UserCreationForm()
+    return render(request, 'registration/signup.html', {
+        'form': form,
+        'error': error_message
+    })
 

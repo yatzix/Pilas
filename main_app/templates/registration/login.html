@@ -2,12 +2,13 @@
 
 {% block content %}
 <div class="auth-bg"></div>
+<div class="sign-bg-text">
 <h1>Login</h1>
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input class="btn blue" type="submit" value="Login">
+    <input class="btn" type="submit" value="Login">
 </form>
-
+</div>
 {% endblock %}

@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="auth-bg"></div>
-
+<div class="sign-bg-text">
 <h1>Signup</h1>
 
 {% if error %}
@@ -12,7 +12,7 @@
 <form method="post">{% csrf_token %}
     
     {{ form.as_p }}
-    <input type="submit" class="btn blue" value="Signup">
+    <input class="btn" type="submit" class="btn blue" value="Signup">
 </form>
-
+</div>
 {% endblock %}
