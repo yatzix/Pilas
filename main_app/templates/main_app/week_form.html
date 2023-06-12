@@ -3,17 +3,17 @@
 {% block content %}
 <div class="week-background"></div>
 {% if object %}
-    <h1>Edit Week</h1>
+    <h1 class="center-align white-text week-bg-text">Edit Week</h1>
 {% else %}
-    <h1>Add Week</h1>
+    <h1 class="center-align white-text week-bg-text">Add Week</h1>
 {% endif %}
 
 <form action="" method="POST">
     {% csrf_token %}
-    <table>
+    <table class="center-align white-text week-bg-text">
         {{ form.as_table }}
     </table>
-    <input class="btn blue" type="submit" value="{% if object %} Update Week {% else %} Add Week {% endif %}">
+    <button class="waves-effect waves-light btn"><input type="submit" value="{% if object %} Update Week {% else %} Add Week {% endif %}"></button>
 </form>
 
 {% endblock %}

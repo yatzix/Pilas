@@ -5,7 +5,7 @@
   <h1 class="center-align white-text week-bg-text">{{ week.name }}</h1>
   
   <h3 class="white-text">Days</h3>
-  <button class="waves-effect waves-light btn"><a href="{% url 'days_create' week.pk %}">Add Day Of The Week</a></button>
+  <button class="waves-effect waves-light btn" ><a href="{% url 'days_create' week.pk %}">Add Day Of The Week</a></button>
   <ul>
     {% for day in week.day_set.all %}
     <a href="{% url 'day_detail' week.pk day.id %}">
@@ -16,7 +16,7 @@
       </div>
       
     {% empty %}
-      <li>Add a Day of the Week To Start Planning</li>
+      <li class="center-align white-text">Add a Day of the Week To Start Planning</li>
       
     {% endfor %}
     <div class="white-text">

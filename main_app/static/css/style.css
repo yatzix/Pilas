@@ -203,3 +203,8 @@ a {
 .thumbnail{
   border-radius: 10px;
 }
+
+#logo-container{
+  
+  padding: 7px;
+}
