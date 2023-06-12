@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Day Detail</h1>
 
-  <h2>{{ day.name }}</h2>
+<div class="day-bg"></div>
+  <h1 class="week-bg-text">{{ day.name }}</h1>
   <form action="{% url 'recipe_search' week.pk day.pk %}" method="get">
     <input type="text" name="query" placeholder="Search recipes" value="{{ query }}">
-    <button type="submit">Search</button>
+    <button class="waves-effect waves-light btn" type="submit">Search</button>
   </form>
-
+<div class="center-align">
   {% if recipes %}
-    <h3>Recipes</h3>
+    <h3 class="white-text">Recipes</h3>
     <ul>
       {% for recipe in recipes %}
         <li>
-          <h4>{{ recipe.strMeal }}</h4>
+          <h4 class="white-text">{{ recipe.strMeal }}</h4>
           {% if recipe.idMeal %}
-            <p>idMeal: {{ recipe.idMeal }}</p>
+            <p class="white-text">idMeal: {{ recipe.idMeal }}</p>
           {% endif %}
-          <img src="{{ recipe.strMealThumb }}" alt="{{ recipe.strMeal }}">
-          <p>{{ recipe.strInstructions }}</p>
+          <img class="thumbnail" src="{{ recipe.strMealThumb }}" alt="{{ recipe.strMeal }}">
+          <p class="white-text">{{ recipe.strInstructions }}</p>
           {% if recipe.ingredients %}
-            <h5>Ingredients:</h5>
+            <h5 class="white-text">Ingredients:</h5>
             <ul>
               {% for key, value in recipe.items %}
                 {% if key|slice:"0:13" == "strIngredient" and value %}
@@ -31,11 +31,11 @@
             </ul>
           {% endif %}
           {% if recipe.strYoutube %}
-          <a href="{{ recipe.strYoutube }}">Watch the Recipe Video</a>
+          <a class="white-text" href="{{ recipe.strYoutube }}">Watch the Recipe Video</a>
           {% endif %}
 
           {% if recipe.strSource %}
-          <a href="{{ recipe.strSource }}">Recipe Source</a>
+          <a class="white-text" href="{{ recipe.strSource }}">Recipe Source</a>
           {% endif %}
 
           {% if recipe.recipe_id %}
@@ -49,35 +49,35 @@
             <input type="hidden" name="ingredients" value="{{ recipe.ingredients }}">
             <input type="hidden" name="video_link" value="{{ recipe.strYoutube }}">
             <input type="hidden" name="source_link" value="{{ recipe.strSource }}">
-            <button type="submit">Save Recipe</button>
+            <button class="waves-effect waves-light btn" type="submit">Save Recipe</button>
           </form>
           {% endif %}
         </li>
       {% empty %}
-        <li>No recipes found</li>
+        <li class="white-text">No recipes found</li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>No recipes found</p>
+    <p class="white-text">No recipes found</p>
   {% endif %}
 
   {% if saved_recipes %}
-    <h3>Saved Recipes</h3>
+    <h3 class="white-text">Saved Recipes</h3>
     <ul>
       {% for recipe in saved_recipes %}
         <li>
-          <h4>{{ recipe.name }}</h4>
-          <img src="{{ recipe.thumbnail }}" alt="{{ recipe.name }}">
-          <p>{{ recipe.instructions }}</p>
+          <h4 class="white-text">{{ recipe.name }}</h4>
+          <img class="thumbnail" src="{{ recipe.thumbnail }}" alt="{{ recipe.name }}">
+          <p class="white-text">{{ recipe.instructions }}</p>
         </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>No recipes saved yet</p>
+    <p class="white-text">No recipes saved yet</p>
   {% endif %}
-
+</div>
   <div class="card-action">
-    <a href="{% url 'days_update' day.id %}">Edit Day</a>
-    <a href="{% url 'days_delete' day.id %}">Delete Day</a>
+    <button class="waves-effect waves-light btn"><a href="{% url 'days_update' day.id %}">Edit Day</a></button>
+    <button class="waves-effect waves-light btn"><a href="{% url 'days_delete' day.id %}">Delete Day</a></button>
   </div>
 {% endblock %}
