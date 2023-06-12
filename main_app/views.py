@@ -47,6 +47,8 @@ class DayDetailView(LoginRequiredMixin, DetailView):
         day = self.object 
         recipes = Recipe.objects.filter(day=day)
         saved_recipes = Recipe.objects.filter(day=day)
+        
+        
 
         context['week'] = week
         context['recipes'] = recipes

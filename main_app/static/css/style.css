@@ -208,3 +208,17 @@ a {
   
   padding: 7px;
 }
+
+.auth-bg{
+  background-image: url(https://i.imgur.com/VwfgPxb.jpg) ;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  
+}

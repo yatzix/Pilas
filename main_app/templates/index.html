@@ -18,7 +18,7 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>Start by adding a Week</p>
-    <a href="{% url 'week_create' %}">Create Week</a>
+    <h5 class="center-align white-text">Start by adding a Week</h5>
+    <a class="waves-effect waves-light btn" href="{% url 'week_create' %}">Create Week</a>
   {% endif %}
 {% endblock %}

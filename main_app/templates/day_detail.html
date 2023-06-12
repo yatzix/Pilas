@@ -4,39 +4,63 @@
 
 <div class="day-bg"></div>
   <h1 class="week-bg-text">{{ day.name }}</h1>
+
+</div>
+<div class="card-action" >
+  <button class="waves-effect waves-light btn"><a href="{% url 'days_update' day.id %}">Edit Day</a></button>
+  <button class="waves-effect waves-light btn"><a href="{% url 'days_delete' day.id %}">Delete Day</a></button>
+</div>
+
   <form action="{% url 'recipe_search' week.pk day.pk %}" method="get">
-    <input type="text" name="query" placeholder="Search recipes" value="{{ query }}">
+    <input type="text" name="query"  class="white-text" placeholder="Search recipes" value="{{ query }}">
     <button class="waves-effect waves-light btn" type="submit">Search</button>
   </form>
 <div class="center-align">
   {% if recipes %}
     <h3 class="white-text">Recipes</h3>
-    <ul>
+    
       {% for recipe in recipes %}
-        <li>
+        
           <h4 class="white-text">{{ recipe.strMeal }}</h4>
+          
           {% if recipe.idMeal %}
             <p class="white-text">idMeal: {{ recipe.idMeal }}</p>
           {% endif %}
+
+          {% if recipe.strMealThumb %}
           <img class="thumbnail" src="{{ recipe.strMealThumb }}" alt="{{ recipe.strMeal }}">
-          <p class="white-text">{{ recipe.strInstructions }}</p>
-          {% if recipe.ingredients %}
-            <h5 class="white-text">Ingredients:</h5>
-            <ul>
-              {% for key, value in recipe.items %}
-                {% if key|slice:"0:13" == "strIngredient" and value %}
-                  <li>{{ value }}</li>
-                {% endif %}
-              {% endfor %}
-            </ul>
+          <hr>
           {% endif %}
+
           {% if recipe.strYoutube %}
-          <a class="white-text" href="{{ recipe.strYoutube }}">Watch the Recipe Video</a>
+          <a class="waves-effect waves-light btn" href="{{ recipe.strYoutube }}">Watch the Recipe Video</a>
           {% endif %}
 
           {% if recipe.strSource %}
-          <a class="white-text" href="{{ recipe.strSource }}">Recipe Source</a>
+          <a class="waves-effect waves-light btn" href="{{ recipe.strSource }}">Recipe Source</a>
           {% endif %}
+          
+          {% if recipe.strInstructions %}
+          <h5 class="white-text" >Instructions:</h5>
+          <p class="center-align white-text week-bg-text" >{{ recipe.strInstructions }}</p>
+          
+
+          {% if recipe.ingredients %}
+          <h5 class="white-text" >Ingredients:</h5>
+          {% endif %}
+          <ul class="center-align white-text week-bg-text">
+            {% for key, value in recipe.items %}
+              {% if key|slice:"0:13" == "strIngredient" and value %}
+              
+                <li class="white-text" >{{ value }}</li>
+              
+              {% endif %} 
+            
+            {% endfor %}
+          </ul>
+          {% endif %} 
+          
+
 
           {% if recipe.recipe_id %}
             <form method="POST" action="{% url 'save_recipe' week.id day.id recipe.recipe_id %}">
@@ -52,11 +76,12 @@
             <button class="waves-effect waves-light btn" type="submit">Save Recipe</button>
           </form>
           {% endif %}
-        </li>
+        
+
       {% empty %}
         <li class="white-text">No recipes found</li>
       {% endfor %}
-    </ul>
+    
   {% else %}
     <p class="white-text">No recipes found</p>
   {% endif %}
@@ -68,16 +93,11 @@
         <li>
           <h4 class="white-text">{{ recipe.name }}</h4>
           <img class="thumbnail" src="{{ recipe.thumbnail }}" alt="{{ recipe.name }}">
-          <p class="white-text">{{ recipe.instructions }}</p>
+          <p class="center-align white-text week-bg-text">{{ recipe.instructions }}</p>
         </li>
       {% endfor %}
     </ul>
   {% else %}
     <p class="white-text">No recipes saved yet</p>
   {% endif %}
-</div>
-  <div class="card-action">
-    <button class="waves-effect waves-light btn"><a href="{% url 'days_update' day.id %}">Edit Day</a></button>
-    <button class="waves-effect waves-light btn"><a href="{% url 'days_delete' day.id %}">Delete Day</a></button>
-  </div>
 {% endblock %}
